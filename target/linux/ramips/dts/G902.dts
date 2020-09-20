@@ -90,12 +90,12 @@
 
 			partition@50000 {
 				label = "Stock_Kernel";
-				reg = <0x50000 0x1f0000>;
+				reg = <0x50000 0x170000>;
 			};
 
-			partition@0x240000 {
+			partition@0x1c0000 {
 				label = "Stock_RootFs";
-				reg = <0x240000 0x5b0000>;
+				reg = <0x1c0000 0x630000>;
 			};
 
 			partition@7f0000 {
