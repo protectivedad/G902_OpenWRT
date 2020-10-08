@@ -90,18 +90,23 @@
 
 			partition@50000 {
 				label = "Stock_Kernel";
-				reg = <0x50000 0x170000>;
+				reg = <0x50000 0x190000>;
 			};
 
-			partition@0x1c0000 {
+			partition@0x1e0000 {
 				label = "Stock_RootFs";
-				reg = <0x1c0000 0x630000>;
+				reg = <0x1e0000 0x30000>;
 			};
 
-			partition@7f0000 {
+			partition@0x210000 {
+				label = "Stock_RootFs_Ext";
+				reg = <0x210000 0xbc0000>;
+			};
+
+			partition@dd0000 {
 				compatible = "denx,uimage";
 				label = "firmware";
-				reg = <0x7f0000 0x7a0000>;
+				reg = <0xdd0000 0x1c0000>;
 			};
 
 			partition@f90000 {
