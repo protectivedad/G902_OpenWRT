@@ -1,0 +1,42 @@
+From 0bfa45f9c35dfd2134edde6d93a21cb5741de1de Mon Sep 17 00:00:00 2001
+From: Marcin Jurkowski <marcin1j@gmail.com>
+Date: Sun, 1 Nov 2020 16:37:31 +0100
+Subject: [PATCH] staging: mt7621-pci: fix PCIe device init
+
+Fix PCIe device init by adding a short delay before
+mt7621_pcie_reset_ep_deassert().
+It's shorter than delay in 4.14 mt7621-pci driver but seems
+to be sufficient.
+
+Without this delay MT7603E 2.4 GHz WiFi card pcie2 port is not
+properly initialized:
+
+  mt7621-pci 1e140000.pcie: pcie1 no card, disable it (RST & CLK)
+  mt7621-pci 1e140000.pcie: pcie2 no card, disable it (RST & CLK)
+  mt7621-pci 1e140000.pcie: PCIE0 enabled
+
+The problem happens on:
+ - NetGear R6220
+ - D-Link DIR-860L B1 (reported in OpenWRT FS#3093)
+
+Signed-off-by: Marcin Jurkowski <marcin1j@gmail.com>
+---
+ drivers/staging/mt7621-pci/pci-mt7621.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/staging/mt7621-pci/pci-mt7621.c b/drivers/staging/mt7621-pci/pci-mt7621.c
+index f961b353c22e..1ac63c7777be 100644
+--- a/drivers/staging/mt7621-pci/pci-mt7621.c
++++ b/drivers/staging/mt7621-pci/pci-mt7621.c
+@@ -521,6 +521,8 @@ static void mt7621_pcie_init_ports(struct mt7621_pcie *pcie)
+ 		}
+ 	}
+ 
++	mdelay(25);
++
+ 	mt7621_pcie_reset_ep_deassert(pcie);
+ 
+ 	tmp = NULL;
+-- 
+2.26.2
+
