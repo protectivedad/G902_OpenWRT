@@ -573,6 +573,17 @@ define Device/firefly_firewrt
 endef
 TARGET_DEVICES += firefly_firewrt
 
+define Device/flyingvoice_g902
+  $(Device/dsa-migration)
+  IMAGE_SIZE := 16000k
+  DEVICE_VENDOR := Flyingvoice
+  DEVICE_MODEL := G902
+  DEVICE_PACKAGES := \
+	kmod-mt76x2 kmod-usb3 kmod-usb-ledtrig-usbport \
+	uboot-envtools
+endef
+TARGET_DEVICES += flyingvoice_g902
+
 define Device/gehua_ghl-r-001
   $(Device/dsa-migration)
   IMAGE_SIZE := 32448k
