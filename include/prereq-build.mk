@@ -1,9 +1,6 @@
+# SPDX-License-Identifier: GPL-2.0-only
 #
-# Copyright (C) 2006-2012 OpenWrt.org
-#
-# This is free software, licensed under the GNU General Public License v2.
-# See /LICENSE for more information.
-#
+# Copyright (C) 2006-2020 OpenWrt.org
 
 include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/prereq.mk
@@ -29,8 +26,8 @@ $(eval $(call TestHostCommand,proper-umask, \
 ifndef IB
 $(eval $(call SetupHostCommand,gcc, \
 	Please install the GNU C Compiler (gcc) 4.8 or later, \
-	$(CC) -dumpversion | grep -E '^(4\.[8-9]|[5-9]\.?|10\.?)', \
-	gcc -dumpversion | grep -E '^(4\.[8-9]|[5-9]\.?|10\.?)', \
+	$(CC) -dumpversion | grep -E '^(4\.[8-9]|[5-9]\.?|1[0-9]\.?)', \
+	gcc -dumpversion | grep -E '^(4\.[8-9]|[5-9]\.?|1[0-9]\.?)', \
 	gcc --version | grep -E 'Apple.(LLVM|clang)' ))
 
 $(eval $(call TestHostCommand,working-gcc, \
@@ -41,8 +38,8 @@ $(eval $(call TestHostCommand,working-gcc, \
 
 $(eval $(call SetupHostCommand,g++, \
 	Please install the GNU C++ Compiler (g++) 4.8 or later, \
-	$(CXX) -dumpversion | grep -E '^(4\.[8-9]|[5-9]\.?|10\.?)', \
-	g++ -dumpversion | grep -E '^(4\.[8-9]|[5-9]\.?|10\.?)', \
+	$(CXX) -dumpversion | grep -E '^(4\.[8-9]|[5-9]\.?|1[0-9]\.?)', \
+	g++ -dumpversion | grep -E '^(4\.[8-9]|[5-9]\.?|1[0-9]\.?)', \
 	g++ --version | grep -E 'Apple.(LLVM|clang)' ))
 
 $(eval $(call TestHostCommand,working-g++, \
@@ -168,6 +165,9 @@ $(eval $(call SetupHostCommand,file,Please install the 'file' package, \
 
 $(eval $(call SetupHostCommand,rsync,Please install 'rsync', \
 	rsync --version </dev/null))
+
+$(eval $(call SetupHostCommand,which,Please install 'which', \
+	which which | grep which))
 
 $(STAGING_DIR_HOST)/bin/mkhash: $(SCRIPT_DIR)/mkhash.c
 	mkdir -p $(dir $@)
