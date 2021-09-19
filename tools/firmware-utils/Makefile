@@ -27,7 +27,7 @@ define Host/Compile
 	$(call cc,add_header)
 	$(call cc,addpattern)
 	$(call cc,asustrx)
-	$(call cc,bcm4908img,-Wall)
+	$(call cc,bcm4908asus,-Wall)
 	$(call cc,bcm4908kernel,-Wall)
 	$(call cc,buffalo-enc buffalo-lib,-Wall)
 	$(call cc,buffalo-tag buffalo-lib,-Wall)
@@ -97,6 +97,7 @@ define Host/Compile
 	$(call cc,wrt400n cyg_crc32)
 	$(call cc,xorimage)
 	$(call cc,zyimage,-Wall)
+	$(call cc,zytrx,-Wall)
 	$(call cc,zyxbcm)
 endef
 

@@ -33,6 +33,7 @@ define Device/alfa-network_ac1200rm
   DEVICE_VENDOR := ALFA Network
   DEVICE_MODEL := AC1200RM
   DEVICE_PACKAGES := kmod-mt76x2 kmod-usb2 kmod-usb-ohci uboot-envtools
+  SUPPORTED_DEVICES += ac1200rm
 endef
 TARGET_DEVICES += alfa-network_ac1200rm
 
@@ -43,6 +44,7 @@ define Device/alfa-network_r36m-e4g
   DEVICE_MODEL := R36M-E4G
   DEVICE_PACKAGES := kmod-i2c-ralink kmod-usb2 kmod-usb-ohci uboot-envtools \
 	uqmi
+  SUPPORTED_DEVICES += r36m-e4g
 endef
 TARGET_DEVICES += alfa-network_r36m-e4g
 
@@ -53,12 +55,14 @@ define Device/alfa-network_tube-e4g
   DEVICE_MODEL := Tube-E4G
   DEVICE_PACKAGES := kmod-usb2 kmod-usb-ohci uboot-envtools uqmi -iwinfo \
 	-kmod-rt2800-soc -wpad-basic-wolfssl
+  SUPPORTED_DEVICES += tube-e4g
 endef
 TARGET_DEVICES += alfa-network_tube-e4g
 
 define Device/amit_jboot
   DLINK_IMAGE_OFFSET := 0x10000
   KERNEL := $(KERNEL_DTB)
+  KERNEL_SIZE := 2048k
   IMAGES += factory.bin
   IMAGE/sysupgrade.bin := mkdlinkfw | pad-rootfs | append-metadata
   IMAGE/factory.bin := mkdlinkfw | pad-rootfs | mkdlinkfw-factory
@@ -442,7 +446,7 @@ define Device/head-weblink_hdrm200
   DEVICE_VENDOR := Head Weblink
   DEVICE_MODEL := HDRM2000
   DEVICE_PACKAGES := kmod-mt76x2 kmod-usb2 kmod-usb-ohci kmod-sdhci-mt7620 \
-	uqmi kmod-usb-serial kmod-usb-serial-option
+	uqmi kmod-usb-serial-option
 endef
 TARGET_DEVICES += head-weblink_hdrm200
 
@@ -981,6 +985,7 @@ define Device/tplink_archer-c20-v1
   TPLINK_HWID := 0xc2000001
   TPLINK_HWREV := 0x44
   TPLINK_HWREVADD := 0x1
+  IMAGES := sysupgrade.bin
   DEVICE_MODEL := Archer C20
   DEVICE_VARIANT := v1
   DEVICE_PACKAGES := kmod-mt76x0e kmod-usb2 kmod-usb-ohci \
@@ -996,6 +1001,7 @@ define Device/tplink_archer-c2-v1
   TPLINK_FLASHLAYOUT := 8Mmtk
   TPLINK_HWID := 0xc7500001
   TPLINK_HWREV := 50
+  IMAGES := sysupgrade.bin
   DEVICE_MODEL := Archer C2
   DEVICE_VARIANT := v1
   DEVICE_PACKAGES := kmod-mt76x0e kmod-usb2 kmod-usb-ohci \
@@ -1029,7 +1035,7 @@ define Device/tplink_archer-mr200
   TPLINK_HWREV := 0x4a
   IMAGES := sysupgrade.bin
   DEVICE_PACKAGES := kmod-mt76x0e kmod-usb2 kmod-usb-net-rndis \
-	kmod-usb-serial kmod-usb-serial-option adb-enablemodem
+	kmod-usb-serial-option adb-enablemodem
   DEVICE_MODEL := Archer MR200
   SUPPORTED_DEVICES += mr200
 endef
@@ -1216,7 +1222,7 @@ define Device/zbtlink_zbt-we826-e
   DEVICE_VENDOR := Zbtlink
   DEVICE_MODEL := ZBT-WE826-E
   DEVICE_PACKAGES := kmod-usb2 kmod-usb-ohci kmod-sdhci-mt7620 uqmi \
-	kmod-usb-serial kmod-usb-serial-option
+	kmod-usb-serial-option
 endef
 TARGET_DEVICES += zbtlink_zbt-we826-e
 

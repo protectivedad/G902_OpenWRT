@@ -22,6 +22,10 @@ define Build/elecom-wrc-gs-factory
 	mv $@.new $@
 endef
 
+define Build/gemtek-trailer
+	printf "%s%08X" ".GEMTEK." "$$(cksum $@ | cut -d ' ' -f1)" >> $@
+endef
+
 define Build/iodata-factory
 	$(eval fw_size=$(word 1,$(1)))
 	$(eval fw_type=$(word 2,$(1)))
@@ -79,6 +83,13 @@ define Build/ubnt-erx-factory-image
 	fi
 endef
 
+define Build/zytrx-header
+	$(eval board=$(word 1,$(1)))
+	$(eval version=$(word 2,$(1)))
+	$(STAGING_DIR_HOST)/bin/zytrx -B '$(board)' -v '$(version)' -i $@ -o $@.new
+	mv $@.new $@
+endef
+
 define Device/dsa-migration
   DEVICE_COMPAT_VERSION := 1.1
   DEVICE_COMPAT_MESSAGE := Config cannot be migrated from swconfig to DSA
@@ -111,8 +122,36 @@ define Device/alfa-network_quad-e4g
   DEVICE_MODEL := Quad-E4G
   DEVICE_PACKAGES := kmod-ata-ahci kmod-sdhci-mt7620 kmod-usb3 uboot-envtools \
 	-wpad-basic-wolfssl
+  SUPPORTED_DEVICES += quad-e4g
 endef
 TARGET_DEVICES += alfa-network_quad-e4g
+
+define Device/ampedwireless_ally_common
+  $(Device/dsa-migration)
+  DEVICE_VENDOR := Amped Wireless
+  DEVICE_PACKAGES := kmod-mt7615e kmod-mt7615-firmware uboot-envtools
+  IMAGE_SIZE := 32768k
+  KERNEL_SIZE := 4096k
+  BLOCKSIZE := 128k
+  PAGESIZE := 2048
+  UBINIZE_OPTS := -E 5
+  KERNEL_INITRAMFS := $(KERNEL_DTB) | uImage lzma -n 'flashable-initramfs' |\
+	edimax-header -s CSYS -m RN68 -f 0x001c0000 -S 0x01100000
+  IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
+endef
+
+define Device/ampedwireless_ally-r1900k
+  $(Device/ampedwireless_ally_common)
+  DEVICE_MODEL := ALLY-R1900K
+  DEVICE_PACKAGES += kmod-usb3
+endef
+TARGET_DEVICES += ampedwireless_ally-r1900k
+
+define Device/ampedwireless_ally-00x19k
+  $(Device/ampedwireless_ally_common)
+  DEVICE_MODEL := ALLY-00X19K
+endef
+TARGET_DEVICES += ampedwireless_ally-00x19k
 
 define Device/asiarf_ap7621-001
   $(Device/dsa-migration)
@@ -221,6 +260,26 @@ define Device/buffalo_wsr-600dhp
   SUPPORTED_DEVICES += wsr-600
 endef
 TARGET_DEVICES += buffalo_wsr-600dhp
+
+define Device/cudy_wr1300
+  $(Device/dsa-migration)
+  IMAGE_SIZE := 15872k
+  DEVICE_VENDOR := Cudy
+  DEVICE_MODEL := WR1300
+  DEVICE_PACKAGES := kmod-mt7603 kmod-mt76x2 kmod-usb2 kmod-usb3 \
+	kmod-usb-ledtrig-usbport
+endef
+TARGET_DEVICES += cudy_wr1300
+
+define Device/cudy_wr2100
+  $(Device/dsa-migration)
+  DEVICE_VENDOR := Cudy
+  DEVICE_MODEL := WR2100
+  IMAGE_SIZE := 15872k
+  UIMAGE_NAME := R11
+  DEVICE_PACKAGES := kmod-mt7603 kmod-mt7615e kmod-mt7615-firmware
+endef
+TARGET_DEVICES += cudy_wr2100
 
 define Device/dlink_dir-8xx-a1
   $(Device/dsa-migration)
@@ -450,6 +509,14 @@ define Device/elecom_wrc-1750gs
 endef
 TARGET_DEVICES += elecom_wrc-1750gs
 
+define Device/elecom_wrc-1750gst2
+  $(Device/elecom_wrc-gs)
+  IMAGE_SIZE := 24576k
+  DEVICE_MODEL := WRC-1750GST2
+  ELECOM_HWNAME := WRC-1750GST2
+endef
+TARGET_DEVICES += elecom_wrc-1750gst2
+
 define Device/elecom_wrc-1750gsv
   $(Device/elecom_wrc-gs)
   IMAGE_SIZE := 11264k
@@ -465,6 +532,20 @@ define Device/elecom_wrc-1900gst
   ELECOM_HWNAME := WRC-1900GST
 endef
 TARGET_DEVICES += elecom_wrc-1900gst
+
+define Device/elecom_wrc-2533ghbk-i
+  $(Device/dsa-migration)
+  $(Device/uimage-lzma-loader)
+  DEVICE_VENDOR := ELECOM
+  DEVICE_MODEL := WRC-2533GHBK-I
+  IMAGE_SIZE := 9856k
+  IMAGES += factory.bin
+  IMAGE/factory.bin := $$(sysupgrade_bin) | check-size | \
+	elx-header 0107002d 8844A2D168B45A2D | \
+	elecom-product-header WRC-2533GHBK-I
+  DEVICE_PACKAGES := kmod-mt7615e kmod-mt7615-firmware
+endef
+TARGET_DEVICES += elecom_wrc-2533ghbk-i
 
 define Device/elecom_wrc-2533gst
   $(Device/elecom_wrc-gs)
@@ -615,6 +696,15 @@ define Device/iodata_wn-dx1167r
 endef
 TARGET_DEVICES += iodata_wn-dx1167r
 
+define Device/iodata_wn-dx1200gr
+  $(Device/iodata_nand)
+  DEVICE_MODEL := WN-DX1200GR
+  KERNEL_INITRAMFS := $(KERNEL_DTB) | loader-kernel | lzma | \
+	uImage lzma -M 0x434f4d43 -n '3.10(XIQ.0)b20' | iodata-mstc-header
+  DEVICE_PACKAGES := kmod-mt7603 kmod-mt7615e kmod-mt7663-firmware-ap
+endef
+TARGET_DEVICES += iodata_wn-dx1200gr
+
 define Device/iodata_wn-gx300gr
   $(Device/dsa-migration)
   $(Device/uimage-lzma-loader)
@@ -672,6 +762,36 @@ define Device/jcg_jhr-ac876m
 endef
 TARGET_DEVICES += jcg_jhr-ac876m
 
+define Device/jcg_q20
+  $(Device/dsa-migration)
+  BLOCKSIZE := 128k
+  PAGESIZE := 2048
+  UBINIZE_OPTS := -E 5
+  KERNEL_SIZE := 4096k
+  IMAGE_SIZE := 91136k
+  IMAGES += factory.bin
+  IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
+  IMAGE/factory.bin := append-kernel | pad-to $$(KERNEL_SIZE) | append-ubi | \
+	check-size
+  DEVICE_VENDOR := JCG
+  DEVICE_MODEL := Q20
+  DEVICE_PACKAGES := kmod-mt7915e uboot-envtools
+endef
+TARGET_DEVICES += jcg_q20
+
+define Device/jcg_y2
+  $(Device/dsa-migration)
+  $(Device/uimage-lzma-loader)
+  IMAGE_SIZE := 16064k
+  IMAGES += factory.bin
+  IMAGE/factory.bin := $$(sysupgrade_bin) | check-size | jcg-header 95.1
+  JCG_MAXSIZE := 16064k
+  DEVICE_VENDOR := JCG
+  DEVICE_MODEL := Y2
+  DEVICE_PACKAGES := kmod-mt7615e kmod-mt7615-firmware kmod-usb3
+endef
+TARGET_DEVICES += jcg_y2
+
 define Device/lenovo_newifi-d1
   $(Device/dsa-migration)
   $(Device/uimage-lzma-loader)
@@ -683,6 +803,25 @@ define Device/lenovo_newifi-d1
   SUPPORTED_DEVICES += newifi-d1
 endef
 TARGET_DEVICES += lenovo_newifi-d1
+
+define Device/linksys_e5600
+  $(Device/dsa-migration)
+  $(Device/uimage-lzma-loader)
+  BLOCKSIZE := 128k
+  PAGESIZE := 2048
+  KERNEL_SIZE := 4096k
+  IMAGE_SIZE := 26624k
+  DEVICE_VENDOR := Linksys
+  DEVICE_MODEL := E5600
+  DEVICE_PACKAGES := kmod-mt7603 kmod-mt7615e kmod-mt7663-firmware-ap \
+	kmod-mt7663-firmware-sta uboot-envtools
+  UBINIZE_OPTS := -E 5
+  IMAGES += factory.bin
+  IMAGE/sysupgrade.bin := sysupgrade-tar | check-size | append-metadata
+  IMAGE/factory.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | \
+	append-ubi | check-size | gemtek-trailer
+endef
+TARGET_DEVICES += linksys_e5600
 
 define Device/linksys_ea7xxx
   $(Device/dsa-migration)
@@ -725,6 +864,14 @@ define Device/linksys_ea7500-v2
   LINKSYS_HWNAME := EA7500v2
 endef
 TARGET_DEVICES += linksys_ea7500-v2
+
+define Device/linksys_ea8100-v1
+  $(Device/linksys_ea7xxx)
+  DEVICE_MODEL := EA8100
+  DEVICE_VARIANT := v1
+  LINKSYS_HWNAME := EA8100
+endef
+TARGET_DEVICES += linksys_ea8100-v1
 
 define Device/linksys_re6500
   $(Device/dsa-migration)
@@ -802,6 +949,7 @@ TARGET_DEVICES += mikrotik_routerboard-m33g
 
 define Device/mqmaker_witi
   $(Device/dsa-migration)
+  $(Device/uimage-lzma-loader)
   IMAGE_SIZE := 16064k
   DEVICE_VENDOR := MQmaker
   DEVICE_MODEL := WiTi
@@ -813,6 +961,7 @@ TARGET_DEVICES += mqmaker_witi
 
 define Device/mtc_wr1201
   $(Device/dsa-migration)
+  $(Device/uimage-lzma-loader)
   IMAGE_SIZE := 16000k
   DEVICE_VENDOR := MTC
   DEVICE_MODEL := Wireless Router WR1201
@@ -1029,6 +1178,20 @@ define Device/samknows_whitebox-v8
 endef
 TARGET_DEVICES += samknows_whitebox-v8
 
+define Device/sercomm_na502
+  $(Device/uimage-lzma-loader)
+  BLOCKSIZE := 128k
+  PAGESIZE := 2048
+  IMAGE_SIZE := 20480k
+  IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
+  UBINIZE_OPTS := -E 5
+  KERNEL_SIZE := 4096k
+  DEVICE_VENDOR := SERCOMM
+  DEVICE_MODEL := NA502
+  DEVICE_PACKAGES := kmod-mt76x2 kmod-mt7603 kmod-usb3
+endef
+TARGET_DEVICES += sercomm_na502
+
 define Device/storylink_sap-g3200u3
   $(Device/dsa-migration)
   IMAGE_SIZE := 7872k
@@ -1078,6 +1241,46 @@ define Device/totolink_x5000r
   DEVICE_PACKAGES := kmod-mt7915e
 endef
 TARGET_DEVICES += totolink_x5000r
+
+define Device/tplink_archer-a6-v3
+  $(Device/dsa-migration)
+  $(Device/tplink-safeloader)
+  DEVICE_MODEL := Archer A6
+  DEVICE_VARIANT := V3
+  DEVICE_PACKAGES := kmod-mt7603 kmod-mt7615e \
+	kmod-mt7663-firmware-ap kmod-mt7663-firmware-sta
+  TPLINK_BOARD_ID := ARCHER-A6-V3
+  KERNEL := $(KERNEL_DTB) | uImage lzma
+  IMAGE_SIZE := 15744k
+endef
+TARGET_DEVICES += tplink_archer-a6-v3
+
+define Device/tplink_archer-c6u-v1
+  $(Device/dsa-migration)
+  $(Device/tplink-safeloader)
+  DEVICE_MODEL := Archer C6U
+  DEVICE_VARIANT := v1
+  DEVICE_PACKAGES := kmod-mt7603 \
+	kmod-mt7615e kmod-mt7663-firmware-ap \
+	kmod-usb3 kmod-usb-ledtrig-usbport
+  KERNEL := $(KERNEL_DTB) | uImage lzma
+  TPLINK_BOARD_ID := ARCHER-C6U-V1
+  IMAGE_SIZE := 15744k
+endef
+TARGET_DEVICES += tplink_archer-c6u-v1
+
+define Device/tplink_eap235-wall-v1
+  $(Device/dsa-migration)
+  $(Device/tplink-safeloader)
+  DEVICE_MODEL := EAP235-Wall
+  DEVICE_VARIANT := v1
+  DEVICE_PACKAGES := kmod-mt7603 kmod-mt7615e kmod-mt7663-firmware-ap
+  TPLINK_BOARD_ID := EAP235-WALL-V1
+  IMAGE_SIZE := 13440k
+  IMAGE/factory.bin := append-rootfs | tplink-safeloader factory | \
+	pad-extra 128
+endef
+TARGET_DEVICES += tplink_eap235-wall-v1
 
 define Device/tplink_re350-v1
   $(Device/dsa-migration)
@@ -1160,6 +1363,17 @@ define Device/ubnt_unifi-nanohd
 endef
 TARGET_DEVICES += ubnt_unifi-nanohd
 
+define Device/unielec_u7621-01-16m
+  $(Device/dsa-migration)
+  $(Device/uimage-lzma-loader)
+  IMAGE_SIZE := 16064k
+  DEVICE_VENDOR := UniElec
+  DEVICE_MODEL := U7621-01
+  DEVICE_VARIANT := 16M
+  DEVICE_PACKAGES := kmod-mt7603 kmod-mt76x2 kmod-usb3
+endef
+TARGET_DEVICES += unielec_u7621-01-16m
+
 define Device/unielec_u7621-06-16m
   $(Device/dsa-migration)
   $(Device/uimage-lzma-loader)
@@ -1195,6 +1409,7 @@ TARGET_DEVICES += wavlink_wl-wn531a6
 
 define Device/wevo_11acnas
   $(Device/dsa-migration)
+  $(Device/uimage-lzma-loader)
   IMAGE_SIZE := 16064k
   UIMAGE_NAME := 11AC-NAS-Router(0.0.0)
   DEVICE_VENDOR := WeVO
@@ -1207,6 +1422,7 @@ TARGET_DEVICES += wevo_11acnas
 
 define Device/wevo_w2914ns-v2
   $(Device/dsa-migration)
+  $(Device/uimage-lzma-loader)
   IMAGE_SIZE := 16064k
   UIMAGE_NAME := W2914NS-V2(0.0.0)
   DEVICE_VENDOR := WeVO
@@ -1231,39 +1447,27 @@ define Device/winstars_ws-wn583a6
 endef
 TARGET_DEVICES += winstars_ws-wn583a6
 
-define Device/xiaomi-ac2100
+define Device/xiaomi_nand_separate
   $(Device/dsa-migration)
   $(Device/uimage-lzma-loader)
+  DEVICE_VENDOR := Xiaomi
+  DEVICE_PACKAGES := uboot-envtools
   BLOCKSIZE := 128k
   PAGESIZE := 2048
   KERNEL_SIZE := 4096k
-  IMAGE_SIZE := 120320k
   UBINIZE_OPTS := -E 5
   IMAGES += kernel1.bin rootfs0.bin
   IMAGE/kernel1.bin := append-kernel
   IMAGE/rootfs0.bin := append-ubi | check-size
   IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
-  DEVICE_VENDOR := Xiaomi
-  DEVICE_PACKAGES := kmod-mt7603 kmod-mt7615e kmod-mt7615-firmware \
-	uboot-envtools
 endef
 
 define Device/xiaomi_mi-router-3g
-  $(Device/dsa-migration)
-  $(Device/uimage-lzma-loader)
-  BLOCKSIZE := 128k
-  PAGESIZE := 2048
-  KERNEL_SIZE := 4096k
-  IMAGE_SIZE := 124416k
-  UBINIZE_OPTS := -E 5
-  IMAGES += kernel1.bin rootfs0.bin
-  IMAGE/kernel1.bin := append-kernel
-  IMAGE/rootfs0.bin := append-ubi | check-size
-  IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
-  DEVICE_VENDOR := Xiaomi
+  $(Device/xiaomi_nand_separate)
   DEVICE_MODEL := Mi Router 3G
-  DEVICE_PACKAGES := kmod-mt7603 kmod-mt76x2 kmod-usb3 \
-	kmod-usb-ledtrig-usbport uboot-envtools
+  IMAGE_SIZE := 124416k
+  DEVICE_PACKAGES += kmod-mt7603 kmod-mt76x2 kmod-usb3 \
+	kmod-usb-ledtrig-usbport
   SUPPORTED_DEVICES += R3G mir3g xiaomi,mir3g
 endef
 TARGET_DEVICES += xiaomi_mi-router-3g
@@ -1300,6 +1504,14 @@ define Device/xiaomi_mi-router-3-pro
 endef
 TARGET_DEVICES += xiaomi_mi-router-3-pro
 
+define Device/xiaomi_mi-router-4
+  $(Device/xiaomi_nand_separate)
+  DEVICE_MODEL := Mi Router 4
+  IMAGE_SIZE := 124416k
+  DEVICE_PACKAGES += kmod-mt7603 kmod-mt76x2
+endef
+TARGET_DEVICES += xiaomi_mi-router-4
+
 define Device/xiaomi_mi-router-4a-gigabit
   $(Device/dsa-migration)
   $(Device/uimage-lzma-loader)
@@ -1312,14 +1524,18 @@ endef
 TARGET_DEVICES += xiaomi_mi-router-4a-gigabit
 
 define Device/xiaomi_mi-router-ac2100
-  $(Device/xiaomi-ac2100)
+  $(Device/xiaomi_nand_separate)
   DEVICE_MODEL := Mi Router AC2100
+  IMAGE_SIZE := 120320k
+  DEVICE_PACKAGES += kmod-mt7603 kmod-mt7615e kmod-mt7615-firmware
 endef
 TARGET_DEVICES += xiaomi_mi-router-ac2100
 
 define Device/xiaomi_redmi-router-ac2100
-  $(Device/xiaomi-ac2100)
+  $(Device/xiaomi_nand_separate)
   DEVICE_MODEL := Redmi Router AC2100
+  IMAGE_SIZE := 120320k
+  DEVICE_PACKAGES += kmod-mt7603 kmod-mt7615e kmod-mt7615-firmware
 endef
 TARGET_DEVICES += xiaomi_redmi-router-ac2100
 
@@ -1364,6 +1580,7 @@ TARGET_DEVICES += youku_yk-l2
 
 define Device/zbtlink_zbt-we1326
   $(Device/dsa-migration)
+  $(Device/uimage-lzma-loader)
   IMAGE_SIZE := 16064k
   DEVICE_VENDOR := Zbtlink
   DEVICE_MODEL := ZBT-WE1326
@@ -1374,6 +1591,7 @@ TARGET_DEVICES += zbtlink_zbt-we1326
 
 define Device/zbtlink_zbt-we3526
   $(Device/dsa-migration)
+  $(Device/uimage-lzma-loader)
   IMAGE_SIZE := 16064k
   DEVICE_VENDOR := Zbtlink
   DEVICE_MODEL := ZBT-WE3526
@@ -1384,6 +1602,7 @@ TARGET_DEVICES += zbtlink_zbt-we3526
 
 define Device/zbtlink_zbt-wg2626
   $(Device/dsa-migration)
+  $(Device/uimage-lzma-loader)
   IMAGE_SIZE := 16064k
   DEVICE_VENDOR := Zbtlink
   DEVICE_MODEL := ZBT-WG2626
@@ -1428,6 +1647,21 @@ define Device/zio_freezio
 	kmod-usb-ledtrig-usbport
 endef
 TARGET_DEVICES += zio_freezio
+
+define Device/zyxel_nr7101
+  $(Device/dsa-migration)
+  BLOCKSIZE := 128k
+  PAGESIZE := 2048
+  UBINIZE_OPTS := -E 5
+  DEVICE_VENDOR := ZyXEL
+  DEVICE_MODEL := NR7101
+  DEVICE_PACKAGES := kmod-mt7603 kmod-usb3 uboot-envtools kmod-usb-net-qmi-wwan kmod-usb-serial-option uqmi
+  KERNEL := $(KERNEL_DTB) | uImage lzma | zytrx-header $$(DEVICE_MODEL) $$(VERSION_DIST)-$$(REVISION)
+  KERNEL_INITRAMFS := $(KERNEL_DTB) | uImage lzma | zytrx-header $$(DEVICE_MODEL) 9.99(ABUV.9)$$(VERSION_DIST)-recovery
+  KERNEL_INITRAMFS_SUFFIX := -recovery.bin
+  IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
+endef
+TARGET_DEVICES += zyxel_nr7101
 
 define Device/zyxel_wap6805
   $(Device/dsa-migration)
