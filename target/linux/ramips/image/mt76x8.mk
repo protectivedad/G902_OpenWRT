@@ -724,6 +724,13 @@ define Device/wavlink_wl-wn570ha1
 endef
 TARGET_DEVICES += wavlink_wl-wn570ha1
 
+define Device/wavlink_wl-wn570hn2
+  IMAGE_SIZE := 7872k
+  DEVICE_VENDOR := Wavlink
+  DEVICE_MODEL := WL-WN570HN2
+endef
+TARGET_DEVICES += wavlink_wl-wn570hn2
+
 define Device/wavlink_wl-wn575a3
   IMAGE_SIZE := 7872k
   DEVICE_VENDOR := Wavlink

@@ -116,7 +116,8 @@ unielec,u7628-01-16m)
 	ucidef_set_led_switch "wan" "wan" "green:wan" "switch0" "0x01"
 	ucidef_set_led_netdev "wifi_led" "wifi" "green:wlan" "wlan0"
 	;;
-wavlink,wl-wn570ha1)
+wavlink,wl-wn570ha1|\
+wavlink,wl-wn570hn2)
 	ucidef_set_led_switch "wan" "wan" "green:wan" "switch0" "0x01"
 	ucidef_set_rssimon "wlan0" "200000" "1"
 	ucidef_set_led_rssi "wifi-low" "wifi-low" "green:wifi-low" "wlan0" "1" "49"

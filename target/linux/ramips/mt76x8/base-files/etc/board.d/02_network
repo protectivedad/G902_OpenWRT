@@ -42,6 +42,7 @@ ramips_setup_interfaces()
 	mercury,mac1200r-v2|\
 	totolink,lr1200|\
 	wavlink,wl-wn570ha1|\
+	wavlink,wl-wn570hn2|\
 	wavlink,wl-wn575a3)
 		ucidef_add_switch "switch0" \
 			"0:lan" "1:lan" "2:lan" "3:lan" "4:wan" "6@eth0"
