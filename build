@@ -1,0 +1,41 @@
+#!/bin/sh
+
+exit_on_error() {
+    exit_code=$1
+    last_command=${@:2}
+    if [ $exit_code -ne 0 ]; then
+        >&2 echo "\"${last_command}\" command failed with exit code ${exit_code}."
+        exit $exit_code
+    fi
+}
+
+# enable !! command completion
+set -o history -o histexpand
+
+command="$0"
+machine=$1
+if [ "${machine}" = "all" ]; then
+	./scripts/feeds update -a
+	./scripts/feeds install -a
+	for config in *.config; do
+		machine=${config%.*}
+		"${command}" ${machine}
+	done
+	exit 0
+fi
+
+config=${machine}.config
+if [ ! -f "${config}" ]; then
+	echo "${machine} config does not exist!"
+	exit 1
+fi
+
+cp ${config} .config
+make defconfig
+make -j4
+exit_on_error $? !!
+
+mv ${config} build_dir/${config}.old
+cp .config ${config}
+
+exit 0
