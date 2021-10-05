@@ -861,7 +861,7 @@ define Device/dlink_dir-825-b1
   DEVICE_VENDOR := D-Link
   DEVICE_MODEL := DIR-825
   DEVICE_VARIANT := B1
-  IMAGE_SIZE := 6208k
+  IMAGE_SIZE := 7808k
   IMAGE/sysupgrade.bin := append-kernel | append-rootfs | pad-rootfs | \
 	append-metadata | check-size
   DEVICE_PACKAGES := kmod-usb-ohci kmod-usb2 kmod-usb-ledtrig-usbport \

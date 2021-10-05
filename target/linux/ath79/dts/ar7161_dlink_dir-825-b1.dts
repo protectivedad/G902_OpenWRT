@@ -191,18 +191,12 @@
 			partition@50000 {
 				compatible = "denx,uimage";
 				label = "firmware";
-				reg = <0x050000 0x610000>;
+				reg = <0x050000 0x7a0000>;
 			};
 
-			partition@660000 {
+			partition@7f0000 {
 				label = "caldata";
-				reg = <0x660000 0x010000>;
-				read-only;
-			};
-
-			partition@670000 {
-				label = "unknown";
-				reg = <0x670000 0x190000>;
+				reg = <0x7f0000 0x010000>;
 				read-only;
 			};
 		};
