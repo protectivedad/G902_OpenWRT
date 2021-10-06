@@ -36,6 +36,6 @@ make -j4
 exit_on_error $? !!
 
 mv ${config} build_dir/${config}.old
-cp .config ${config}
+./scripts/diffconfig.sh > ${config}
 
 exit 0
