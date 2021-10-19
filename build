@@ -21,7 +21,7 @@ if [ "${machine}" = "all" ]; then
 	for config in *.config; do
 		machine=${config%.*}
 		"${command}" ${machine}
-		mv $(find bin/targets -name '*_${machine}*') ./all
+		mv $(find bin/targets -name "*_${machine}*") ./all
 	done
 	exit 0
 fi
