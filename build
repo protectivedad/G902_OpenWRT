@@ -17,9 +17,11 @@ machine=$1
 if [ "${machine}" = "all" ]; then
 	./scripts/feeds update -a
 	./scripts/feeds install -a
+	mkdir -p ./all
 	for config in *.config; do
 		machine=${config%.*}
 		"${command}" ${machine}
+		mv $(find bin/targets -name '*_${machine}*') ./all
 	done
 	exit 0
 fi
@@ -32,6 +34,7 @@ fi
 
 cp ${config} .config
 make defconfig
+make clean
 make -j4
 exit_on_error $? !!
 
