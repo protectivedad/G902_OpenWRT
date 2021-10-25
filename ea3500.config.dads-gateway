@@ -1,0 +1,194 @@
+CONFIG_TARGET_kirkwood=y
+CONFIG_TARGET_kirkwood_DEVICE_linksys_ea3500=y
+CONFIG_TARGET_BOARD="kirkwood"
+CONFIG_DEVEL=y
+CONFIG_TOOLCHAINOPTS=y
+# CONFIG_BINUTILS_USE_VERSION_2_34 is not set
+CONFIG_BINUTILS_USE_VERSION_2_35_1=y
+CONFIG_BINUTILS_VERSION="2.35.1"
+CONFIG_BINUTILS_VERSION_2_35_1=y
+# CONFIG_BUSYBOX_DEFAULT_FEATURE_IPV6 is not set
+CONFIG_CCACHE=y
+CONFIG_GCC_DEFAULT_PIE=y
+CONFIG_GCC_DEFAULT_SSP=y
+CONFIG_GCC_USE_GRAPHITE=y
+CONFIG_GCC_USE_VERSION_10=y
+# CONFIG_GCC_USE_VERSION_8 is not set
+CONFIG_GCC_VERSION="10.2.0"
+CONFIG_GCC_VERSION_10=y
+# CONFIG_GDB is not set
+# CONFIG_IPV6 is not set
+# CONFIG_KERNEL_IPV6 is not set
+CONFIG_MUSL_DISABLE_CRYPT_SIZE_HACK=y
+CONFIG_OPENSSL_ENGINE=y
+CONFIG_OPENSSL_PREFER_CHACHA_OVER_GCM=y
+CONFIG_OPENSSL_WITH_ASM=y
+CONFIG_OPENSSL_WITH_CHACHA_POLY1305=y
+CONFIG_OPENSSL_WITH_CMS=y
+CONFIG_OPENSSL_WITH_DEPRECATED=y
+CONFIG_OPENSSL_WITH_ERROR_MESSAGES=y
+CONFIG_OPENSSL_WITH_PSK=y
+CONFIG_OPENSSL_WITH_SRP=y
+CONFIG_OPENSSL_WITH_TLS13=y
+CONFIG_OPENVPN_openssl_ENABLE_DEF_AUTH=y
+CONFIG_OPENVPN_openssl_ENABLE_FRAGMENT=y
+CONFIG_OPENVPN_openssl_ENABLE_MULTIHOME=y
+CONFIG_OPENVPN_openssl_ENABLE_PF=y
+CONFIG_OPENVPN_openssl_ENABLE_PORT_SHARE=y
+CONFIG_OPENVPN_openssl_ENABLE_SMALL=y
+# CONFIG_PACKAGE_MAC80211_MESH is not set
+CONFIG_PACKAGE_NTFS-3G_HAS_PROBE=y
+CONFIG_PACKAGE_NTFS-3G_USE_LIBFUSE=y
+CONFIG_PACKAGE_avahi-dbus-daemon=y
+CONFIG_PACKAGE_block-mount=y
+CONFIG_PACKAGE_blockd=y
+CONFIG_PACKAGE_cgi-io=y
+CONFIG_PACKAGE_dbus=y
+CONFIG_PACKAGE_ddns-scripts=y
+CONFIG_PACKAGE_ddns-scripts-services=y
+CONFIG_PACKAGE_e2fsprogs=y
+CONFIG_PACKAGE_etherwake=y
+CONFIG_PACKAGE_exfat-fsck=y
+CONFIG_PACKAGE_fdisk=y
+CONFIG_PACKAGE_ip-tiny=y
+# CONFIG_PACKAGE_iptables is not set
+# CONFIG_PACKAGE_iw is not set
+CONFIG_PACKAGE_iw-full=y
+CONFIG_PACKAGE_kmod-crypto-acompress=y
+CONFIG_PACKAGE_kmod-crypto-aead=y
+CONFIG_PACKAGE_kmod-crypto-arc4=y
+CONFIG_PACKAGE_kmod-crypto-ccm=y
+CONFIG_PACKAGE_kmod-crypto-cmac=y
+CONFIG_PACKAGE_kmod-crypto-crc32c=y
+CONFIG_PACKAGE_kmod-crypto-ctr=y
+CONFIG_PACKAGE_kmod-crypto-des=y
+CONFIG_PACKAGE_kmod-crypto-ecb=y
+CONFIG_PACKAGE_kmod-crypto-gcm=y
+CONFIG_PACKAGE_kmod-crypto-gf128=y
+CONFIG_PACKAGE_kmod-crypto-ghash=y
+CONFIG_PACKAGE_kmod-crypto-hash=y
+CONFIG_PACKAGE_kmod-crypto-hmac=y
+CONFIG_PACKAGE_kmod-crypto-manager=y
+CONFIG_PACKAGE_kmod-crypto-md4=y
+CONFIG_PACKAGE_kmod-crypto-md5=y
+CONFIG_PACKAGE_kmod-crypto-null=y
+CONFIG_PACKAGE_kmod-crypto-pcompress=y
+CONFIG_PACKAGE_kmod-crypto-rng=y
+CONFIG_PACKAGE_kmod-crypto-seqiv=y
+CONFIG_PACKAGE_kmod-crypto-sha256=y
+CONFIG_PACKAGE_kmod-crypto-sha512=y
+CONFIG_PACKAGE_kmod-fs-autofs4=y
+CONFIG_PACKAGE_kmod-fs-exfat=y
+CONFIG_PACKAGE_kmod-fs-ext4=y
+CONFIG_PACKAGE_kmod-fs-ksmbd=y
+CONFIG_PACKAGE_kmod-fs-vfat=y
+CONFIG_PACKAGE_kmod-fuse=y
+# CONFIG_PACKAGE_kmod-ipt-offload is not set
+# CONFIG_PACKAGE_kmod-lib-crc-ccitt is not set
+CONFIG_PACKAGE_kmod-lib-crc16=y
+CONFIG_PACKAGE_kmod-lib-crc32c=y
+CONFIG_PACKAGE_kmod-lib-lzo=y
+CONFIG_PACKAGE_kmod-lib-zstd=y
+# CONFIG_PACKAGE_kmod-nf-flow is not set
+# CONFIG_PACKAGE_kmod-nf-ipt6 is not set
+CONFIG_PACKAGE_kmod-nls-cp437=y
+CONFIG_PACKAGE_kmod-nls-iso8859-1=y
+CONFIG_PACKAGE_kmod-nls-utf8=y
+# CONFIG_PACKAGE_kmod-ppp is not set
+CONFIG_PACKAGE_kmod-scsi-core=y
+CONFIG_PACKAGE_kmod-tun=y
+CONFIG_PACKAGE_kmod-usb-printer=y
+CONFIG_PACKAGE_kmod-usb-storage=y
+CONFIG_PACKAGE_kmod-usbip=y
+CONFIG_PACKAGE_kmod-usbip-server=y
+CONFIG_PACKAGE_kmod-zram=y
+CONFIG_PACKAGE_ksmbd-avahi-service=y
+CONFIG_PACKAGE_ksmbd-server=y
+CONFIG_PACKAGE_libavahi-dbus-support=y
+CONFIG_PACKAGE_libblkid=y
+CONFIG_PACKAGE_libcomerr=y
+CONFIG_PACKAGE_libdaemon=y
+CONFIG_PACKAGE_libdbus=y
+CONFIG_PACKAGE_libevdev=y
+CONFIG_PACKAGE_libexpat=y
+CONFIG_PACKAGE_libext2fs=y
+CONFIG_PACKAGE_libfdisk=y
+CONFIG_PACKAGE_libfuse=y
+# CONFIG_PACKAGE_libip6tc is not set
+CONFIG_PACKAGE_libiwinfo-lua=y
+CONFIG_PACKAGE_libkmod=y
+CONFIG_PACKAGE_liblua=y
+CONFIG_PACKAGE_liblucihttp=y
+CONFIG_PACKAGE_liblucihttp-lua=y
+CONFIG_PACKAGE_libncurses=y
+CONFIG_PACKAGE_libnl-core=y
+CONFIG_PACKAGE_libnl-genl=y
+CONFIG_PACKAGE_libopenssl=y
+CONFIG_PACKAGE_libopenssl-conf=y
+CONFIG_PACKAGE_libpci=y
+CONFIG_PACKAGE_librt=y
+CONFIG_PACKAGE_libsmartcols=y
+CONFIG_PACKAGE_libss=y
+CONFIG_PACKAGE_libubus-lua=y
+CONFIG_PACKAGE_libudev-zero=y
+CONFIG_PACKAGE_libusb-1.0=y
+CONFIG_PACKAGE_libustream-openssl=y
+# CONFIG_PACKAGE_libustream-wolfssl is not set
+CONFIG_PACKAGE_libuuid=y
+# CONFIG_PACKAGE_libwolfssl is not set
+CONFIG_PACKAGE_lua=y
+CONFIG_PACKAGE_luci-app-advanced-reboot=y
+CONFIG_PACKAGE_luci-app-ddns=y
+CONFIG_PACKAGE_luci-app-firewall=y
+CONFIG_PACKAGE_luci-app-ksmbd=y
+CONFIG_PACKAGE_luci-app-openvpn=y
+CONFIG_PACKAGE_luci-app-opkg=y
+CONFIG_PACKAGE_luci-app-p910nd=y
+CONFIG_PACKAGE_luci-app-watchcat=y
+CONFIG_PACKAGE_luci-app-wol=y
+CONFIG_PACKAGE_luci-base=y
+CONFIG_PACKAGE_luci-compat=y
+CONFIG_PACKAGE_luci-lib-base=y
+CONFIG_PACKAGE_luci-lib-ip=y
+CONFIG_PACKAGE_luci-lib-ipkg=y
+CONFIG_PACKAGE_luci-lib-json=y
+CONFIG_PACKAGE_luci-lib-jsonc=y
+CONFIG_PACKAGE_luci-lib-nixio=y
+# CONFIG_PACKAGE_luci-lib-nixio_notls is not set
+CONFIG_PACKAGE_luci-lib-nixio_openssl=y
+CONFIG_PACKAGE_luci-mod-admin-full=y
+CONFIG_PACKAGE_luci-mod-network=y
+CONFIG_PACKAGE_luci-mod-status=y
+CONFIG_PACKAGE_luci-mod-system=y
+CONFIG_PACKAGE_luci-proto-relay=y
+CONFIG_PACKAGE_luci-theme-material=y
+CONFIG_PACKAGE_ntfs-3g=y
+CONFIG_PACKAGE_openssl-util=y
+CONFIG_PACKAGE_openvpn-openssl=y
+CONFIG_PACKAGE_p910nd=y
+CONFIG_PACKAGE_pciids=y
+CONFIG_PACKAGE_pciutils=y
+# CONFIG_PACKAGE_ppp is not set
+CONFIG_PACKAGE_relayd=y
+CONFIG_PACKAGE_rpcd=y
+CONFIG_PACKAGE_rpcd-mod-file=y
+CONFIG_PACKAGE_rpcd-mod-iwinfo=y
+CONFIG_PACKAGE_rpcd-mod-luci=y
+CONFIG_PACKAGE_terminfo=y
+CONFIG_PACKAGE_uhttpd=y
+CONFIG_PACKAGE_uhttpd-mod-ubus=y
+CONFIG_PACKAGE_usbids=y
+CONFIG_PACKAGE_usbutils=y
+CONFIG_PACKAGE_watchcat=y
+CONFIG_PACKAGE_wpad=y
+# CONFIG_PACKAGE_wpad-basic-wolfssl is not set
+CONFIG_PACKAGE_wsdd2=y
+CONFIG_PACKAGE_zlib=y
+CONFIG_PACKAGE_zram-swap=y
+CONFIG_TARGET_OPTIMIZATION="-O2 -pipe"
+CONFIG_TARGET_OPTIONS=y
+# CONFIG_WPA_WOLFSSL is not set
+# CONFIG_KSMBD_SMB_INSECURE_SERVER is not set
+# CONFIG_OPENVPN_openssl_ENABLE_LZ4 is not set
+# CONFIG_OPENVPN_openssl_ENABLE_LZO is not set
+# CONFIG_PACKAGE_liblzo is not set
